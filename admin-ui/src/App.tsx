@@ -9,6 +9,10 @@ import { UserList } from "./user/UserList";
 import { UserCreate } from "./user/UserCreate";
 import { UserEdit } from "./user/UserEdit";
 import { UserShow } from "./user/UserShow";
+import { TsetList } from "./tset/TsetList";
+import { TsetCreate } from "./tset/TsetCreate";
+import { TsetEdit } from "./tset/TsetEdit";
+import { TsetShow } from "./tset/TsetShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -28,7 +32,7 @@ const App = (): React.ReactElement => {
   return (
     <div className="App">
       <Admin
-        title={"My service"}
+        title={"TaskService"}
         dataProvider={dataProvider}
         authProvider={jwtAuthProvider}
         theme={theme}
@@ -41,6 +45,13 @@ const App = (): React.ReactElement => {
           edit={UserEdit}
           create={UserCreate}
           show={UserShow}
+        />
+        <Resource
+          name="Tset"
+          list={TsetList}
+          edit={TsetEdit}
+          create={TsetCreate}
+          show={TsetShow}
         />
       </Admin>
     </div>
