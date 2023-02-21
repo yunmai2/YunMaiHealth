@@ -9,6 +9,10 @@ import { UserList } from "./user/UserList";
 import { UserCreate } from "./user/UserCreate";
 import { UserEdit } from "./user/UserEdit";
 import { UserShow } from "./user/UserShow";
+import { YuyuList } from "./yuyu/YuyuList";
+import { YuyuCreate } from "./yuyu/YuyuCreate";
+import { YuyuEdit } from "./yuyu/YuyuEdit";
+import { YuyuShow } from "./yuyu/YuyuShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -28,7 +32,7 @@ const App = (): React.ReactElement => {
   return (
     <div className="App">
       <Admin
-        title={"My service"}
+        title={"UserService"}
         dataProvider={dataProvider}
         authProvider={jwtAuthProvider}
         theme={theme}
@@ -41,6 +45,13 @@ const App = (): React.ReactElement => {
           edit={UserEdit}
           create={UserCreate}
           show={UserShow}
+        />
+        <Resource
+          name="Yuyu"
+          list={YuyuList}
+          edit={YuyuEdit}
+          create={YuyuCreate}
+          show={YuyuShow}
         />
       </Admin>
     </div>
