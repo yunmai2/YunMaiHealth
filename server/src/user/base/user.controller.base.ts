@@ -27,6 +27,9 @@ import { UserWhereUniqueInput } from "./UserWhereUniqueInput";
 import { UserFindManyArgs } from "./UserFindManyArgs";
 import { UserUpdateInput } from "./UserUpdateInput";
 import { User } from "./User";
+import { TsetFindManyArgs } from "../../tset/base/TsetFindManyArgs";
+import { Tset } from "../../tset/base/Tset";
+import { TsetWhereUniqueInput } from "../../tset/base/TsetWhereUniqueInput";
 @swagger.ApiBearerAuth()
 @common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
 export class UserControllerBase {
@@ -189,5 +192,107 @@ export class UserControllerBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @nestAccessControl.UseRoles({
+    resource: "Tset",
+    action: "read",
+    possession: "any",
+  })
+  @common.Get("/:id/tsets")
+  @ApiNestedQuery(TsetFindManyArgs)
+  async findManyTsets(
+    @common.Req() request: Request,
+    @common.Param() params: UserWhereUniqueInput
+  ): Promise<Tset[]> {
+    const query = plainToClass(TsetFindManyArgs, request.query);
+    const results = await this.service.findTsets(params.id, {
+      ...query,
+      select: {
+        createdAt: true,
+        id: true,
+
+        test: {
+          select: {
+            id: true,
+          },
+        },
+
+        updatedAt: true,
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results;
+  }
+
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "update",
+    possession: "any",
+  })
+  @common.Post("/:id/tsets")
+  async connectTsets(
+    @common.Param() params: UserWhereUniqueInput,
+    @common.Body() body: TsetWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      tsets: {
+        connect: body,
+      },
+    };
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "update",
+    possession: "any",
+  })
+  @common.Patch("/:id/tsets")
+  async updateTsets(
+    @common.Param() params: UserWhereUniqueInput,
+    @common.Body() body: TsetWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      tsets: {
+        set: body,
+      },
+    };
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "update",
+    possession: "any",
+  })
+  @common.Delete("/:id/tsets")
+  async disconnectTsets(
+    @common.Param() params: UserWhereUniqueInput,
+    @common.Body() body: TsetWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      tsets: {
+        disconnect: body,
+      },
+    };
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
   }
 }

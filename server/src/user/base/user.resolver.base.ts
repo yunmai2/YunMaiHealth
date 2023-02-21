@@ -25,6 +25,8 @@ import { DeleteUserArgs } from "./DeleteUserArgs";
 import { UserFindManyArgs } from "./UserFindManyArgs";
 import { UserFindUniqueArgs } from "./UserFindUniqueArgs";
 import { User } from "./User";
+import { TsetFindManyArgs } from "../../tset/base/TsetFindManyArgs";
+import { Tset } from "../../tset/base/Tset";
 import { UserService } from "../user.service";
 
 @graphql.Resolver(() => User)
@@ -134,5 +136,25 @@ export class UserResolverBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => [Tset])
+  @nestAccessControl.UseRoles({
+    resource: "Tset",
+    action: "read",
+    possession: "any",
+  })
+  async tsets(
+    @graphql.Parent() parent: User,
+    @graphql.Args() args: TsetFindManyArgs
+  ): Promise<Tset[]> {
+    const results = await this.service.findTsets(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results;
   }
 }
