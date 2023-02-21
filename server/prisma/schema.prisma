@@ -17,3 +17,10 @@ model User {
   updatedAt DateTime @updatedAt
   username  String   @unique
 }
+
+model Yuyu {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  tedt      String?
+  updatedAt DateTime @updatedAt
+}
