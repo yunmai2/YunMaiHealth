@@ -1,6 +1,6 @@
 {
-  "short_name": "UserService",
-  "name": "UserService",
+  "short_name": "TaskService",
+  "name": "TaskService",
   "icons": [
     {
       "src": "favicon.ico",

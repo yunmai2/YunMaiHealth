@@ -5,12 +5,12 @@ import {
   SimpleForm,
   EditProps,
   TextInput,
-  ReferenceArrayInput,
-  SelectArrayInput,
   PasswordInput,
+  SelectArrayInput,
+  ReferenceArrayInput,
 } from "react-admin";
 
-import { YuyuTitle } from "../yuyu/YuyuTitle";
+import { TaskUserTitle } from "../taskUser/TaskUserTitle";
 import { ROLES_OPTIONS } from "../user/RolesOptions";
 
 export const UserEdit = (props: EditProps): React.ReactElement => {
@@ -19,14 +19,6 @@ export const UserEdit = (props: EditProps): React.ReactElement => {
       <SimpleForm>
         <TextInput label="First Name" source="firstName" />
         <TextInput label="Last Name" source="lastName" />
-        <ReferenceArrayInput
-          source="loginInfo"
-          reference="Yuyu"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
-        >
-          <SelectArrayInput optionText={YuyuTitle} />
-        </ReferenceArrayInput>
         <PasswordInput label="Password" source="password" />
         <SelectArrayInput
           source="roles"
@@ -34,6 +26,14 @@ export const UserEdit = (props: EditProps): React.ReactElement => {
           optionText="label"
           optionValue="value"
         />
+        <ReferenceArrayInput
+          source="tsets"
+          reference="TaskUser"
+          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+          format={(value: any) => value && value.map((v: any) => v.id)}
+        >
+          <SelectArrayInput optionText={TaskUserTitle} />
+        </ReferenceArrayInput>
         <TextInput label="Username" source="username" />
       </SimpleForm>
     </Edit>

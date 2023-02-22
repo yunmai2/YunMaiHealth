@@ -8,21 +8,21 @@ generator client {
 }
 
 model User {
-  createdAt DateTime @default(now())
+  createdAt DateTime   @default(now())
   firstName String?
-  id        String   @id @default(cuid())
+  id        String     @id @default(cuid())
   lastName  String?
-  loginInfo Yuyu[]
   password  String
   roles     Json
-  updatedAt DateTime @updatedAt
-  username  String   @unique
+  tsets     TaskUser[]
+  updatedAt DateTime   @updatedAt
+  username  String     @unique
 }
 
-model Yuyu {
+model TaskUser {
   createdAt DateTime @default(now())
   id        String   @id @default(cuid())
-  tedt      String?
+  test      User?    @relation(fields: [testId], references: [id])
+  testId    String?
   updatedAt DateTime @updatedAt
-  users     User[]
 }
