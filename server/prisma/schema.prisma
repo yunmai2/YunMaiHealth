@@ -14,6 +14,15 @@ model User {
   lastName  String?
   password  String
   roles     Json
+  tsets     Tset[]
   updatedAt DateTime @updatedAt
   username  String   @unique
+}
+
+model Tset {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  test      User?    @relation(fields: [testId], references: [id])
+  testId    String?
+  updatedAt DateTime @updatedAt
 }
