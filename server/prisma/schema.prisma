@@ -12,8 +12,17 @@ model User {
   firstName String?
   id        String   @id @default(cuid())
   lastName  String?
+  loginInfo Yuyu[]
   password  String
   roles     Json
   updatedAt DateTime @updatedAt
   username  String   @unique
+}
+
+model Yuyu {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  tedt      String?
+  updatedAt DateTime @updatedAt
+  users     User[]
 }

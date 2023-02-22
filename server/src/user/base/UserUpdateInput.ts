@@ -11,7 +11,9 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, IsJSON } from "class-validator";
+import { IsString, IsOptional, ValidateNested, IsJSON } from "class-validator";
+import { YuyuUpdateManyWithoutUsersInput } from "./YuyuUpdateManyWithoutUsersInput";
+import { Type } from "class-transformer";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
 
@@ -38,6 +40,18 @@ class UserUpdateInput {
     nullable: true,
   })
   lastName?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => YuyuUpdateManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => YuyuUpdateManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => YuyuUpdateManyWithoutUsersInput, {
+    nullable: true,
+  })
+  loginInfo?: YuyuUpdateManyWithoutUsersInput;
 
   @ApiProperty({
     required: false,
@@ -72,4 +86,4 @@ class UserUpdateInput {
   username?: string;
 }
 
-export { UserUpdateInput };
+export { UserUpdateInput as UserUpdateInput };

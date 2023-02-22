@@ -13,8 +13,9 @@ import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { Type } from "class-transformer";
-import { IsOptional } from "class-validator";
+import { IsOptional, ValidateNested } from "class-validator";
 import { StringFilter } from "../../util/StringFilter";
+import { YuyuListRelationFilter } from "../../yuyu/base/YuyuListRelationFilter";
 
 @InputType()
 class UserWhereInput {
@@ -53,6 +54,18 @@ class UserWhereInput {
 
   @ApiProperty({
     required: false,
+    type: () => YuyuListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => YuyuListRelationFilter)
+  @IsOptional()
+  @Field(() => YuyuListRelationFilter, {
+    nullable: true,
+  })
+  loginInfo?: YuyuListRelationFilter;
+
+  @ApiProperty({
+    required: false,
     type: StringFilter,
   })
   @Type(() => StringFilter)
@@ -63,4 +76,4 @@ class UserWhereInput {
   username?: StringFilter;
 }
 
-export { UserWhereInput };
+export { UserWhereInput as UserWhereInput };

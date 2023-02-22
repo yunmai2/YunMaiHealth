@@ -11,39 +11,26 @@ https://docs.amplication.com/how-to/custom-code
   */
 import * as common from "@nestjs/common";
 import * as swagger from "@nestjs/swagger";
-import * as nestAccessControl from "nest-access-control";
-import * as defaultAuthGuard from "../../auth/defaultAuth.guard";
 import { isRecordNotFoundError } from "../../prisma.util";
 import * as errors from "../../errors";
 import { Request } from "express";
 import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { UserService } from "../user.service";
-import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
-import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { UserCreateInput } from "./UserCreateInput";
 import { UserWhereInput } from "./UserWhereInput";
 import { UserWhereUniqueInput } from "./UserWhereUniqueInput";
 import { UserFindManyArgs } from "./UserFindManyArgs";
 import { UserUpdateInput } from "./UserUpdateInput";
 import { User } from "./User";
-@swagger.ApiBearerAuth()
-@common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
-export class UserControllerBase {
-  constructor(
-    protected readonly service: UserService,
-    protected readonly rolesBuilder: nestAccessControl.RolesBuilder
-  ) {}
+import { YuyuFindManyArgs } from "../../yuyu/base/YuyuFindManyArgs";
+import { Yuyu } from "../../yuyu/base/Yuyu";
+import { YuyuWhereUniqueInput } from "../../yuyu/base/YuyuWhereUniqueInput";
 
-  @common.UseInterceptors(AclValidateRequestInterceptor)
-  @nestAccessControl.UseRoles({
-    resource: "User",
-    action: "create",
-    possession: "any",
-  })
+export class UserControllerBase {
+  constructor(protected readonly service: UserService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: User })
-  @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async create(@common.Body() data: UserCreateInput): Promise<User> {
     return await this.service.create({
       data: data,
@@ -59,15 +46,8 @@ export class UserControllerBase {
     });
   }
 
-  @common.UseInterceptors(AclFilterResponseInterceptor)
-  @nestAccessControl.UseRoles({
-    resource: "User",
-    action: "read",
-    possession: "any",
-  })
   @common.Get()
   @swagger.ApiOkResponse({ type: [User] })
-  @swagger.ApiForbiddenResponse()
   @ApiNestedQuery(UserFindManyArgs)
   async findMany(@common.Req() request: Request): Promise<User[]> {
     const args = plainToClass(UserFindManyArgs, request.query);
@@ -85,16 +65,9 @@ export class UserControllerBase {
     });
   }
 
-  @common.UseInterceptors(AclFilterResponseInterceptor)
-  @nestAccessControl.UseRoles({
-    resource: "User",
-    action: "read",
-    possession: "own",
-  })
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: User })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async findOne(
     @common.Param() params: UserWhereUniqueInput
   ): Promise<User | null> {
@@ -118,16 +91,9 @@ export class UserControllerBase {
     return result;
   }
 
-  @common.UseInterceptors(AclValidateRequestInterceptor)
-  @nestAccessControl.UseRoles({
-    resource: "User",
-    action: "update",
-    possession: "any",
-  })
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: User })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async update(
     @common.Param() params: UserWhereUniqueInput,
     @common.Body() data: UserUpdateInput
@@ -156,15 +122,9 @@ export class UserControllerBase {
     }
   }
 
-  @nestAccessControl.UseRoles({
-    resource: "User",
-    action: "delete",
-    possession: "any",
-  })
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: User })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async delete(
     @common.Param() params: UserWhereUniqueInput
   ): Promise<User | null> {
@@ -189,5 +149,80 @@ export class UserControllerBase {
       }
       throw error;
     }
+  }
+
+  @common.Get("/:id/loginInfo")
+  @ApiNestedQuery(YuyuFindManyArgs)
+  async findManyLoginInfo(
+    @common.Req() request: Request,
+    @common.Param() params: UserWhereUniqueInput
+  ): Promise<Yuyu[]> {
+    const query = plainToClass(YuyuFindManyArgs, request.query);
+    const results = await this.service.findLoginInfo(params.id, {
+      ...query,
+      select: {
+        createdAt: true,
+        id: true,
+        tedt: true,
+        updatedAt: true,
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results;
+  }
+
+  @common.Post("/:id/loginInfo")
+  async connectLoginInfo(
+    @common.Param() params: UserWhereUniqueInput,
+    @common.Body() body: YuyuWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      loginInfo: {
+        connect: body,
+      },
+    };
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Patch("/:id/loginInfo")
+  async updateLoginInfo(
+    @common.Param() params: UserWhereUniqueInput,
+    @common.Body() body: YuyuWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      loginInfo: {
+        set: body,
+      },
+    };
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Delete("/:id/loginInfo")
+  async disconnectLoginInfo(
+    @common.Param() params: UserWhereUniqueInput,
+    @common.Body() body: YuyuWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      loginInfo: {
+        disconnect: body,
+      },
+    };
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
   }
 }
