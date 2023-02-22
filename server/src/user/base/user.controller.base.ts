@@ -23,9 +23,9 @@ import { UserWhereUniqueInput } from "./UserWhereUniqueInput";
 import { UserFindManyArgs } from "./UserFindManyArgs";
 import { UserUpdateInput } from "./UserUpdateInput";
 import { User } from "./User";
-import { YuyuFindManyArgs } from "../../yuyu/base/YuyuFindManyArgs";
-import { Yuyu } from "../../yuyu/base/Yuyu";
-import { YuyuWhereUniqueInput } from "../../yuyu/base/YuyuWhereUniqueInput";
+import { TaskUserFindManyArgs } from "../../taskUser/base/TaskUserFindManyArgs";
+import { TaskUser } from "../../taskUser/base/TaskUser";
+import { TaskUserWhereUniqueInput } from "../../taskUser/base/TaskUserWhereUniqueInput";
 
 export class UserControllerBase {
   constructor(protected readonly service: UserService) {}
@@ -151,19 +151,25 @@ export class UserControllerBase {
     }
   }
 
-  @common.Get("/:id/loginInfo")
-  @ApiNestedQuery(YuyuFindManyArgs)
-  async findManyLoginInfo(
+  @common.Get("/:id/tsets")
+  @ApiNestedQuery(TaskUserFindManyArgs)
+  async findManyTsets(
     @common.Req() request: Request,
     @common.Param() params: UserWhereUniqueInput
-  ): Promise<Yuyu[]> {
-    const query = plainToClass(YuyuFindManyArgs, request.query);
-    const results = await this.service.findLoginInfo(params.id, {
+  ): Promise<TaskUser[]> {
+    const query = plainToClass(TaskUserFindManyArgs, request.query);
+    const results = await this.service.findTsets(params.id, {
       ...query,
       select: {
         createdAt: true,
         id: true,
-        tedt: true,
+
+        test: {
+          select: {
+            id: true,
+          },
+        },
+
         updatedAt: true,
       },
     });
@@ -175,13 +181,13 @@ export class UserControllerBase {
     return results;
   }
 
-  @common.Post("/:id/loginInfo")
-  async connectLoginInfo(
+  @common.Post("/:id/tsets")
+  async connectTsets(
     @common.Param() params: UserWhereUniqueInput,
-    @common.Body() body: YuyuWhereUniqueInput[]
+    @common.Body() body: TaskUserWhereUniqueInput[]
   ): Promise<void> {
     const data = {
-      loginInfo: {
+      tsets: {
         connect: body,
       },
     };
@@ -192,13 +198,13 @@ export class UserControllerBase {
     });
   }
 
-  @common.Patch("/:id/loginInfo")
-  async updateLoginInfo(
+  @common.Patch("/:id/tsets")
+  async updateTsets(
     @common.Param() params: UserWhereUniqueInput,
-    @common.Body() body: YuyuWhereUniqueInput[]
+    @common.Body() body: TaskUserWhereUniqueInput[]
   ): Promise<void> {
     const data = {
-      loginInfo: {
+      tsets: {
         set: body,
       },
     };
@@ -209,13 +215,13 @@ export class UserControllerBase {
     });
   }
 
-  @common.Delete("/:id/loginInfo")
-  async disconnectLoginInfo(
+  @common.Delete("/:id/tsets")
+  async disconnectTsets(
     @common.Param() params: UserWhereUniqueInput,
-    @common.Body() body: YuyuWhereUniqueInput[]
+    @common.Body() body: TaskUserWhereUniqueInput[]
   ): Promise<void> {
     const data = {
-      loginInfo: {
+      tsets: {
         disconnect: body,
       },
     };
