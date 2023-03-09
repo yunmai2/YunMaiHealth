@@ -9,10 +9,10 @@ import { UserList } from "./user/UserList";
 import { UserCreate } from "./user/UserCreate";
 import { UserEdit } from "./user/UserEdit";
 import { UserShow } from "./user/UserShow";
-import { TaskUserList } from "./taskUser/TaskUserList";
-import { TaskUserCreate } from "./taskUser/TaskUserCreate";
-import { TaskUserEdit } from "./taskUser/TaskUserEdit";
-import { TaskUserShow } from "./taskUser/TaskUserShow";
+import { YuyuList } from "./yuyu/YuyuList";
+import { YuyuCreate } from "./yuyu/YuyuCreate";
+import { YuyuEdit } from "./yuyu/YuyuEdit";
+import { YuyuShow } from "./yuyu/YuyuShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -32,7 +32,7 @@ const App = (): React.ReactElement => {
   return (
     <div className="App">
       <Admin
-        title={"TaskService"}
+        title={"UserService"}
         dataProvider={dataProvider}
         authProvider={jwtAuthProvider}
         theme={theme}
@@ -47,11 +47,11 @@ const App = (): React.ReactElement => {
           show={UserShow}
         />
         <Resource
-          name="TaskUser"
-          list={TaskUserList}
-          edit={TaskUserEdit}
-          create={TaskUserCreate}
-          show={TaskUserShow}
+          name="Yuyu"
+          list={YuyuList}
+          edit={YuyuEdit}
+          create={YuyuCreate}
+          show={YuyuShow}
         />
       </Admin>
     </div>

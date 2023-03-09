@@ -19,8 +19,8 @@ import { DeleteUserArgs } from "./DeleteUserArgs";
 import { UserFindManyArgs } from "./UserFindManyArgs";
 import { UserFindUniqueArgs } from "./UserFindUniqueArgs";
 import { User } from "./User";
-import { TaskUserFindManyArgs } from "../../taskUser/base/TaskUserFindManyArgs";
-import { TaskUser } from "../../taskUser/base/TaskUser";
+import { YuyuFindManyArgs } from "../../yuyu/base/YuyuFindManyArgs";
+import { Yuyu } from "../../yuyu/base/Yuyu";
 import { UserService } from "../user.service";
 @graphql.Resolver(() => User)
 export class UserResolverBase {
@@ -92,12 +92,12 @@ export class UserResolverBase {
     }
   }
 
-  @graphql.ResolveField(() => [TaskUser])
-  async tsets(
+  @graphql.ResolveField(() => [Yuyu])
+  async loginInfo(
     @graphql.Parent() parent: User,
-    @graphql.Args() args: TaskUserFindManyArgs
-  ): Promise<TaskUser[]> {
-    const results = await this.service.findTsets(parent.id, args);
+    @graphql.Args() args: YuyuFindManyArgs
+  ): Promise<Yuyu[]> {
+    const results = await this.service.findLoginInfo(parent.id, args);
 
     if (!results) {
       return [];

@@ -15,7 +15,7 @@ import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { Type } from "class-transformer";
 import { IsOptional, ValidateNested } from "class-validator";
 import { StringFilter } from "../../util/StringFilter";
-import { TaskUserListRelationFilter } from "../../taskUser/base/TaskUserListRelationFilter";
+import { YuyuListRelationFilter } from "../../yuyu/base/YuyuListRelationFilter";
 
 @InputType()
 class UserWhereInput {
@@ -54,15 +54,15 @@ class UserWhereInput {
 
   @ApiProperty({
     required: false,
-    type: () => TaskUserListRelationFilter,
+    type: () => YuyuListRelationFilter,
   })
   @ValidateNested()
-  @Type(() => TaskUserListRelationFilter)
+  @Type(() => YuyuListRelationFilter)
   @IsOptional()
-  @Field(() => TaskUserListRelationFilter, {
+  @Field(() => YuyuListRelationFilter, {
     nullable: true,
   })
-  tsets?: TaskUserListRelationFilter;
+  loginInfo?: YuyuListRelationFilter;
 
   @ApiProperty({
     required: false,

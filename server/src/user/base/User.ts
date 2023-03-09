@@ -15,13 +15,13 @@ import {
   IsDate,
   IsString,
   IsOptional,
-  IsJSON,
   ValidateNested,
+  IsJSON,
 } from "class-validator";
 import { Type } from "class-transformer";
+import { Yuyu } from "../../yuyu/base/Yuyu";
 import { GraphQLJSON } from "graphql-type-json";
 import { JsonValue } from "type-fest";
-import { TaskUser } from "../../taskUser/base/TaskUser";
 
 @ObjectType()
 class User {
@@ -64,20 +64,20 @@ class User {
   lastName!: string | null;
 
   @ApiProperty({
+    required: false,
+    type: () => [Yuyu],
+  })
+  @ValidateNested()
+  @Type(() => Yuyu)
+  @IsOptional()
+  loginInfo?: Array<Yuyu>;
+
+  @ApiProperty({
     required: true,
   })
   @IsJSON()
   @Field(() => GraphQLJSON)
   roles!: JsonValue;
-
-  @ApiProperty({
-    required: false,
-    type: () => [TaskUser],
-  })
-  @ValidateNested()
-  @Type(() => TaskUser)
-  @IsOptional()
-  tsets?: Array<TaskUser>;
 
   @ApiProperty({
     required: true,
