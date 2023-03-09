@@ -1,11 +1,11 @@
+import { YuyuUpdateManyWithoutUsersInput } from "./YuyuUpdateManyWithoutUsersInput";
 import { InputJsonValue } from "../../types";
-import { TaskUserUpdateManyWithoutUsersInput } from "./TaskUserUpdateManyWithoutUsersInput";
 
 export type UserUpdateInput = {
   firstName?: string | null;
   lastName?: string | null;
+  loginInfo?: YuyuUpdateManyWithoutUsersInput;
   password?: string;
   roles?: InputJsonValue;
-  tsets?: TaskUserUpdateManyWithoutUsersInput;
   username?: string;
 };

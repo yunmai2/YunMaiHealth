@@ -11,11 +11,11 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, IsJSON, ValidateNested } from "class-validator";
+import { IsString, IsOptional, ValidateNested, IsJSON } from "class-validator";
+import { YuyuUpdateManyWithoutUsersInput } from "./YuyuUpdateManyWithoutUsersInput";
+import { Type } from "class-transformer";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
-import { TaskUserUpdateManyWithoutUsersInput } from "./TaskUserUpdateManyWithoutUsersInput";
-import { Type } from "class-transformer";
 
 @InputType()
 class UserUpdateInput {
@@ -43,6 +43,18 @@ class UserUpdateInput {
 
   @ApiProperty({
     required: false,
+    type: () => YuyuUpdateManyWithoutUsersInput,
+  })
+  @ValidateNested()
+  @Type(() => YuyuUpdateManyWithoutUsersInput)
+  @IsOptional()
+  @Field(() => YuyuUpdateManyWithoutUsersInput, {
+    nullable: true,
+  })
+  loginInfo?: YuyuUpdateManyWithoutUsersInput;
+
+  @ApiProperty({
+    required: false,
     type: String,
   })
   @IsString()
@@ -61,18 +73,6 @@ class UserUpdateInput {
     nullable: true,
   })
   roles?: InputJsonValue;
-
-  @ApiProperty({
-    required: false,
-    type: () => TaskUserUpdateManyWithoutUsersInput,
-  })
-  @ValidateNested()
-  @Type(() => TaskUserUpdateManyWithoutUsersInput)
-  @IsOptional()
-  @Field(() => TaskUserUpdateManyWithoutUsersInput, {
-    nullable: true,
-  })
-  tsets?: TaskUserUpdateManyWithoutUsersInput;
 
   @ApiProperty({
     required: false,

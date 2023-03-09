@@ -1,11 +1,11 @@
 import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { StringFilter } from "../../util/StringFilter";
-import { TaskUserListRelationFilter } from "../taskUser/TaskUserListRelationFilter";
+import { YuyuListRelationFilter } from "../yuyu/YuyuListRelationFilter";
 
 export type UserWhereInput = {
   firstName?: StringNullableFilter;
   id?: StringFilter;
   lastName?: StringNullableFilter;
-  tsets?: TaskUserListRelationFilter;
+  loginInfo?: YuyuListRelationFilter;
   username?: StringFilter;
 };

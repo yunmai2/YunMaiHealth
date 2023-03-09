@@ -10,7 +10,7 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, User, TaskUser } from "@prisma/client";
+import { Prisma, User, Yuyu } from "@prisma/client";
 
 export class UserServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -47,14 +47,14 @@ export class UserServiceBase {
     return this.prisma.user.delete(args);
   }
 
-  async findTsets(
+  async findLoginInfo(
     parentId: string,
-    args: Prisma.TaskUserFindManyArgs
-  ): Promise<TaskUser[]> {
+    args: Prisma.YuyuFindManyArgs
+  ): Promise<Yuyu[]> {
     return this.prisma.user
       .findUniqueOrThrow({
         where: { id: parentId },
       })
-      .tsets(args);
+      .loginInfo(args);
   }
 }
